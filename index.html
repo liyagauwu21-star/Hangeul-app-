@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangeul Master - Belajar Aksara Korea Interaktif</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Memanggil File CSS Eksternal (Opsional jika dipisah) -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar Utama -->
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between py-3 sm:h-18 gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-indigo-600 flex items-center justify-center text-white font-kr font-black text-2xl shadow-md shadow-rose-200">
+                        한
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-rose-600 to-indigo-600 bg-clip-text text-transparent">
+                            Hangeul Master
+                        </h1>
+                        <p class="text-xs text-slate-500 font-medium">Hafal Huruf, Cara Baca & Penulisan Korea</p>
+                    </div>
+                </div>
+
+                <!-- Navigasi Tab -->
+                <nav class="flex bg-slate-100 p-1.5 rounded-2xl w-full sm:w-auto justify-center shadow-inner">
+                    <button onclick="switchMainTab('belajar')" id="tab-belajar" class="flex-1 sm:flex-none px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200 bg-white text-rose-600 shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Daftar Huruf
+                    </button>
+                    <button onclick="switchMainTab('flashcard')" id="tab-flashcard" class="flex-1 sm:flex-none px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-layer-group"></i> Kartu Hafalan
+                    </button>
+                    <button onclick="switchMainTab('kuis')" id="tab-kuis" class="flex-1 sm:flex-none px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-500"></i> Kuis
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notifikasi -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Konten Utama -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- SECTION 1: DAFTAR HURUF -->
+        <section id="view-belajar" class="space-y-6">
+            <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold mb-2">
+                        ✨ Panduan Lengkap 40 Aksara Hangeul
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">Kuasai Cara Baca & Urutan Goresan Hangeul</h2>
+                    <p class="text-white/90 text-sm sm:text-base leading-relaxed">
+                        Semua huruf dilengkapi pelafalan Bahasa Indonesia (contoh: <strong class="underline decoration-amber-300">ㄱ dibaca giyok</strong>), suara penutur asli, dan papan latihan menulis.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Filter & Pencarian -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80">
+                <div class="flex flex-wrap gap-2" id="category-filters">
+                    <button onclick="filterCategory('semua')" data-cat="semua" class="cat-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition-all">Semua (40)</button>
+                    <button onclick="filterCategory('konsonan_dasar')" data-cat="konsonan_dasar" class="cat-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-rose-50 text-rose-700 hover:bg-rose-100 transition-all">Konsonan Dasar (14)</button>
+                    <button onclick="filterCategory('konsonan_rangkap')" data-cat="konsonan_rangkap" class="cat-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all">Konsonan Rangkap (5)</button>
+                    <button onclick="filterCategory('vokal_dasar')" data-cat="vokal_dasar" class="cat-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all">Vokal Dasar (10)</button>
+                    <button onclick="filterCategory('vokal_rangkap')" data-cat="vokal_rangkap" class="cat-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all">Vokal Rangkap (11)</button>
+                </div>
+                <div class="relative w-full lg:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Cari huruf / cara baca..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all">
+                </div>
+            </div>
+
+            <!-- Grid Kartu Hangeul -->
+            <div id="hangeul-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        </section>
+
+        <!-- SECTION 2: FLASHCARD -->
+        <section id="view-flashcard" class="hidden max-w-2xl mx-auto space-y-6 py-4">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl font-extrabold text-slate-800">Kartu Hafalan Interaktif</h2>
+                <p class="text-sm text-slate-500">Tebak cara bacanya, lalu klik kartu untuk membalik dan mengecek jawaban.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: KUIS -->
+        <section id="view-kuis" class="hidden max-w-2xl mx-auto py-4">
+            <div id="quiz-start-screen" class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-100 text-center space-y-6">
+                <div class="w-20 h-20 mx-auto rounded-3xl bg-amber-100 text-amber-500 flex items-center justify-center text-4xl shadow-inner">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-800">Uji Hafalan Hangeul</h2>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Memanggil File JavaScript Eksternal -->
+    <script src="script.js"></script>
+</body>
+</html>
